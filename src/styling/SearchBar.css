@@ -1,0 +1,17 @@
+.barContainer{
+  width:100%;
+  height:10%;
+  background-color: gray;
+  display:flex;
+}
+
+.logo{
+  text-decoration:overline;
+  font-weight:bold;
+  font-style:italic;
+  display:flex;
+  text-align:center;
+  display:center;
+  justify-content: center;
+  align-items: center;
+}

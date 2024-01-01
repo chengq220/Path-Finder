@@ -1,0 +1,16 @@
+html, body, .App, #root{
+  height:100%;
+  width:100%;
+  user-select:none;
+}
+
+.App {
+  text-align: center;
+}
+
+.container{
+  display:flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height:90%;
+}

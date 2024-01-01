@@ -1,0 +1,32 @@
+.panel{
+  height:100%;
+  width:10%;
+  background-color:#e1eaea;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.options{
+  transition-duration: 1s;
+  padding: 15px 0 15px 0;
+}
+
+.options:first-child{
+  margin-top:10px;
+}
+
+.options:hover{
+  background-color:gray;
+  cursor: pointer;
+
+}
+
+.options:last-child{
+    height:60%;
+    cursor:default;
+}
+
+.options:last-child:hover {
+  background-color: initial;
+}

@@ -9,8 +9,12 @@ function SearchBar(){
           <div>Find Web Application</div>
         </div>
       </div>
-      <input placeholder="Enter your query here" />
-      <div>item 2</div>
+      <form>
+        <label>
+          <input type="text" name="query" placeholder="Search for location"/>
+        </label>
+        <input type="submit" value="Search" />
+      </form>
     </div>
   );
 }

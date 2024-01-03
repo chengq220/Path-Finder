@@ -1,2 +1,2 @@
-# Simplify GPS Application
-Simplify GPS like application for shortest path using Djikstra's Algorithm
+# Path Finding Application
+Finding the path between two points on a grid

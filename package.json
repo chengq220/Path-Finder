@@ -1,5 +1,5 @@
 {
-  "name": "gps_front",
+  "name": "path-finder",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -35,19 +35,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "description": "Simplify GPS like application for shortest path using Djikstra's Algorithm",
-  "main": "index.js",
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chengq220/Simplify-GPS.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/chengq220/Simplify-GPS/issues"
-  },
-  "homepage": "https://github.com/chengq220/Simplify-GPS#readme"
+  }
 }

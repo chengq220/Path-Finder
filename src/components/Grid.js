@@ -1,8 +1,6 @@
 import '../styling/Grid.css';
 import React, { useEffect, useContext, useState } from 'react';
 import SelectContext from './context.js';
-import BorderEvent from './events.js';
-import debounce from 'lodash.debounce';
 
 function GridComponent(){
   const {selectionState, setSelectionState} = useContext(SelectContext);

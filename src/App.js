@@ -6,14 +6,24 @@ import React, { useState, createContext  } from 'react';
 import SelectContext from './components/context.js';
 
 function App() {
+
   const [selectionState, setSelectionState] = useState("init");
   const [source, setSource] = useState(0);
   const [sink, setSink] = useState(0);
 
+  const generateEmptyGrid = (rows, cols) => {
+    return Array.from({ length: rows }).map(() =>
+      Array.from({ length: cols }).fill(0)
+    );
+  };
+
+  const [grid, setGrid] = useState(() => generateEmptyGrid(25, 25));
+
   const value = {
     selectionState, setSelectionState,
     source, setSource,
-    sink, setSink
+    sink, setSink,
+    grid, setGrid
   };
   return (
     <>

@@ -4,6 +4,7 @@ import SelectContext from './context.js';
 
 function Selection(){
   const {selectionState, setSelectionState} = useContext(SelectContext);
+  const {grid} = useContext(SelectContext);
 
   function select(state){
     const active = document.querySelectorAll(".active");
@@ -35,7 +36,7 @@ function Selection(){
   }
 
   function execute(){
-    console.log("execute triggered");
+    console.log(grid);
   }
 
   function save(){

@@ -1,14 +1,35 @@
 import '../styling/Grid.css';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import SelectContext from './context.js';
+import BorderEvent from './events.js';
+import debounce from 'lodash.debounce';
 
 function GridComponent(){
   const {selectionState, setSelectionState} = useContext(SelectContext);
   const {source, setSource} = useContext(SelectContext);
   const {sink, setSink} = useContext(SelectContext);
 
+  //0 => available road   1 => Source  2 => Destination  3 => roadblock
+  const {grid, setGrid} = useContext(SelectContext);
+  const [isMouseOverGrid, setMouseOverGrid] = useState(false);
+
   useEffect(() => {
-    fitGrid(25, 25);
+    const gridElement = document.getElementsByClassName('grid')[0];
+    const { left, top, width, height } = gridElement.getBoundingClientRect();
+    const threshold = 1;
+
+    const handleMouseMove = (e) => {
+      var isOutside = (e.clientX <= left + threshold && e.clientX >= left - threshold)
+      || (e.clientY <= top + threshold && e.clientY >= top - threshold);
+      if(isOutside){
+        setGrid(grid);
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    }
   }, []);
 
   function generateGrid(width, height) {
@@ -24,6 +45,7 @@ function GridComponent(){
       }
       rows.push(<tr>{cells}</tr>);
     }
+    fitGrid(25, 25);
     return <table><tbody>{rows}</tbody></table>;
   }
 
@@ -38,40 +60,60 @@ function GridComponent(){
     });
   }
 
-  function handleClick(id){
-    console.log(selectionState);
-    var idx = id.split("_");
+  function selectSource(id){
     var cell = document.querySelector(`#${id}`);
-    if(selectionState === "s1"){
-      if(cell.style.backgroundColor === "red"){
-        cell.style.backgroundColor = "white";
-        setSource(0);
-      }
-      else if(source === 0){
-        cell.style.backgroundColor = "red";
-        setSource(1);
-      }
-      else{
-        alert("You can only select one Source")
-      }
-    }else if(selectionState === "s2"){
-      if(cell.style.backgroundColor === "blue"){
-        cell.style.backgroundColor = "white";
-        setSink(0);
-      }
-      else if(sink === 0){
-        cell.style.backgroundColor = "blue";
-        setSink(1);
-      }
-      else{
-        alert("You can only select one Destination")
-      }
-    }else if(selectionState === "s3"){
-      if(cell.style.backgroundColor === "black"){
-        cell.style.backgroundColor = "white";
-      }else{
+    var idx = id.split("_");
+    var row = idx[0].charAt(1);
+    var col = idx[1];
+    if(source === 0 && cell.style.backgroundColor === ""){
+      cell.style.backgroundColor = "red";
+      grid[row][col] = 1;
+      setSource(1);
+    }else{
+      alert("You can only select one Source");
+    }
+  }
+
+  function selectDestination(id){
+    var cell = document.querySelector(`#${id}`);
+    var idx = id.split("_");
+    var row = idx[0].charAt(1);
+    var col = idx[1];
+    if(sink === 0 && cell.style.backgroundColor === ""){
+      cell.style.backgroundColor = "blue";
+      grid[row][col] = 2;
+      setSink(1);
+    }else{
+      alert("You can only select one Sink");
+    }
+  }
+
+  function selectBlock(id){
+    var cell = document.querySelector(`#${id}`);
+    var idx = id.split("_");
+    var row = idx[0].charAt(1);
+    var col = idx[1];
+    if(cell.style.backgroundColor !== "red" || cell.style.backgroundColor !== "blue"){
+      if(cell.style.backgroundColor === "white" || cell.style.backgroundColor === ""){
         cell.style.backgroundColor = "black";
+        grid[row][col] = 3;
+      }else{
+        cell.style.backgroundColor = "white";
+        grid[row][col] = 0;
       }
+    }
+  }
+
+  function handleClick(id){
+    // var idx = id.split("_");
+    // console.log(idx);
+    // var cell = document.querySelector(`#${id}`);
+    if(selectionState === "s1"){
+      selectSource(id);
+    }else if(selectionState === "s2"){
+      selectDestination(id);
+    }else if(selectionState === "s3"){
+      selectBlock(id);
     }
   }
 

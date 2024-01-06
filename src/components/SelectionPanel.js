@@ -4,7 +4,7 @@ import SelectContext from './context.js';
 
 function Selection(){
   const {selectionState, setSelectionState} = useContext(SelectContext);
-  const {grid} = useContext(SelectContext);
+  const {grid, setGrid} = useContext(SelectContext);
 
   function select(state){
     const active = document.querySelectorAll(".active");
@@ -36,12 +36,32 @@ function Selection(){
   }
 
   function execute(){
-    console.log(grid);
+    console.log("grid");
   }
 
-  function save(){
-    console.log("save triggered")
-  }
+  const save = async () => {
+    console.log("save triggered");
+    try{
+      const response = await fetch("http://localhost:8000/save",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+         key1: grid,
+        }),
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log('Response from server:', responseData);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+  };
 
   return(
     <div className="panel">
@@ -49,7 +69,7 @@ function Selection(){
       <div onClick = {() => select("s2")} className="options s2">Select Destination</div>
       <div onClick = {() => select("s3")} className="options s3">Add Road Block</div>
       <div onClick = {() => select("init")} className="options">Default</div>
-      <div onClick = {() => save()} className="options">Save Configuration</div>
+      <div onClick = {save} className="options">Save Configuration</div>
       <div onClick = {() => execute()} className="options">Execute</div>
       <div className="options"></div>
     </div>

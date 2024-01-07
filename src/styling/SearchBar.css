@@ -1,11 +1,11 @@
 form{
   display:flex;
   align-items: center;
-  /* justify-content: center; */
-
+  justify-content: center;
 }
 
-input[type=text] {
+
+select[type=text] {
    width: 600px;
 }
 
@@ -25,4 +25,14 @@ input[type=text] {
   display:center;
   justify-content: center;
   align-items: center;
+}
+
+.submit{
+  background-color:white;
+  padding:2px 5px 2px 5px;
+  margin-left: 10px;
+}
+
+.submit:hover{
+  cursor: pointer;
 }

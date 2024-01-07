@@ -56,10 +56,30 @@ app.post('/save', async (req, res) => {
   res.json({ message: 'Save Endpoint accessed successfully' });
 });
 
+app.get('/options', async (req, res) => {
+  try{
+      const result = (await databasePool.query('SELECT id FROM pathfindt'))['0'];
+      res.send(result);
+  }catch(error){
+    console.error('Error reading data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/load', async (req, res) => {
+  const id = (req.body).key;
+  try{
+      const result = (await databasePool.query('SELECT * FROM pathfindt WHERE id=?', id))['0'];
+      res.send(result);
+  }catch(error){
+    console.error('Error reading data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('Hello, Express!');
 });
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -40,7 +40,7 @@ function Selection(){
   }
 
   const save = async () => {
-    console.log("save triggered");
+    // console.log("save triggered");
     try{
       const response = await fetch("http://localhost:8000/save",{
         method: 'POST',
@@ -48,7 +48,7 @@ function Selection(){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-         key1: grid,
+         key: grid,
         }),
       });
 

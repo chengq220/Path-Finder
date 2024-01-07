@@ -103,9 +103,6 @@ function GridComponent(){
   }
 
   function handleClick(id){
-    // var idx = id.split("_");
-    // console.log(idx);
-    // var cell = document.querySelector(`#${id}`);
     if(selectionState === "s1"){
       selectSource(id);
     }else if(selectionState === "s2"){

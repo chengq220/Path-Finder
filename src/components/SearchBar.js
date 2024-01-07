@@ -1,9 +1,15 @@
 import '../styling/SearchBar.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import SelectContext from './context.js';
+import { GenerateEmptyGrid } from './functions';
 
 function SearchBar(){
   const [option, setOption] = useState([]);
   const [select, setSelect] = useState(0);
+  const {source, setSource} = useContext(SelectContext);
+  const {sink, setSink} = useContext(SelectContext);
+  const {grid, setGrid} = useContext(SelectContext);
+
   useEffect(() => {
     const fetchOptions = async () => {
       try {
@@ -19,6 +25,7 @@ function SearchBar(){
           configuration.push(data[`${i}`].id);
         }
         setOption(configuration);
+        setSelect(configuration[0]);
       } catch (error) {
         console.error('Error fetching options: ', error.message);
       }
@@ -41,10 +48,28 @@ function SearchBar(){
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = (await response.json())['0'];
-      console.log(data);
+      loadGrid(data);
     }catch(error){
       console.error('Error fetching options: ', error.message);
     }
+  };
+
+  const loadGrid = (data) => {
+    var newGrid = GenerateEmptyGrid(25, 25);
+    const source = data['source']['0'];
+    const sink = data['destination']['0'];
+    const blocks = data['block'];
+    newGrid[source['0']][source['1']] = 1;
+    newGrid[sink['0']][sink['1']] = 2;
+    for(let i = 0; i < blocks.length; ++i){
+      var currBlock = blocks[`${i}`];
+      var row = currBlock['0'];
+      var col = currBlock['1'];
+      newGrid[row][col] = 3;
+    }
+    setSource(1);
+    setSink(1);
+    setGrid(newGrid);
   };
 
   return(
@@ -65,7 +90,7 @@ function SearchBar(){
           ))}
           </select>
         </label>
-        <div className={"submit"} onClick={submit}>Load</div>
+        <div className={"submit"} onClick={submit}>Load configuration</div>
       </form>
     </div>
   );

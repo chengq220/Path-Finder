@@ -68,8 +68,10 @@ app.get('/options', async (req, res) => {
 
 app.post('/load', async (req, res) => {
   const id = (req.body).key;
+  console.log(id);
   try{
       const result = (await databasePool.query('SELECT * FROM pathfindt WHERE id=?', id))['0'];
+      console.log(result);
       res.send(result);
   }catch(error){
     console.error('Error reading data:', error);

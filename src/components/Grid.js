@@ -10,6 +10,7 @@ function GridComponent(){
   //0 => available road   1 => Source  2 => Destination  3 => roadblock
   const {grid, setGrid} = useContext(SelectContext);
   const [isMouseOverGrid, setMouseOverGrid] = useState(false);
+  const [block, setBlock] = useState(0);
 
 
   useEffect(() => {
@@ -74,13 +75,13 @@ function GridComponent(){
     var idx = id.split("_");
     var row = idx[0].substring(1);
     var col = idx[1];
-    // if(cell.className !== "source" && cell.className !== "sink"){
     if(cell.className === "default"){
       grid[row][col] = 3;
+      setBlock(block + 1);
     }else if(cell.className === "blocks"){
       grid[row][col] = 0;
+      setBlock(block - 1);
     }
-    // }
   }
 
   function handleClick(id){

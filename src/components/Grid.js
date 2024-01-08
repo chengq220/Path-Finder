@@ -11,15 +11,17 @@ function GridComponent(){
   const {grid, setGrid} = useContext(SelectContext);
   const [isMouseOverGrid, setMouseOverGrid] = useState(false);
 
+
   useEffect(() => {
     const gridElement = document.getElementsByClassName('grid')[0];
     const { left, top, width, height } = gridElement.getBoundingClientRect();
     const threshold = 1;
+    fitGrid(width, height);
 
     const handleMouseMove = (e) => {
       var isOutside = (e.clientX <= left + threshold && e.clientX >= left - threshold)
       || (e.clientY <= top + threshold && e.clientY >= top - threshold);
-      if(isOutside){
+      if (isOutside) {
         setGrid(grid);
       }
     };
@@ -28,24 +30,7 @@ function GridComponent(){
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
     }
-  }, []);
-
-  function generateGrid(width, height) {
-    const rows = [];
-    for (let i = 0; i < height; ++i) {
-      const cells = [];
-      for (let j = 0; j < width; ++j) {
-        cells.push(
-          <td id={`c${i}_${j}`} onClick={() => handleClick(`c${i}_${j}`)}>
-              {}
-          </td>
-        );
-      }
-      rows.push(<tr>{cells}</tr>);
-    }
-    fitGrid(25, 25);
-    return <table><tbody>{rows}</tbody></table>;
-  }
+  }, [setGrid, grid]);
 
   function fitGrid(width, height){
     const tdElements = document.querySelectorAll('.grid td');
@@ -61,10 +46,9 @@ function GridComponent(){
   function selectSource(id){
     var cell = document.querySelector(`#${id}`);
     var idx = id.split("_");
-    var row = idx[0].charAt(1);
+    var row = idx[0].substring(1);
     var col = idx[1];
-    if(source === 0 && cell.style.backgroundColor === ""){
-      cell.style.backgroundColor = "red";
+    if(source === 0 && cell.className === "default"){
       grid[row][col] = 1;
       setSource(1);
     }else{
@@ -75,10 +59,9 @@ function GridComponent(){
   function selectDestination(id){
     var cell = document.querySelector(`#${id}`);
     var idx = id.split("_");
-    var row = idx[0].charAt(1);
+    var row = idx[0].substring(1);
     var col = idx[1];
-    if(sink === 0 && cell.style.backgroundColor === ""){
-      cell.style.backgroundColor = "blue";
+    if(sink === 0 && cell.className === "default"){
       grid[row][col] = 2;
       setSink(1);
     }else{
@@ -89,17 +72,15 @@ function GridComponent(){
   function selectBlock(id){
     var cell = document.querySelector(`#${id}`);
     var idx = id.split("_");
-    var row = idx[0].charAt(1);
+    var row = idx[0].substring(1);
     var col = idx[1];
-    if(cell.style.backgroundColor !== "red" || cell.style.backgroundColor !== "blue"){
-      if(cell.style.backgroundColor === "white" || cell.style.backgroundColor === ""){
-        cell.style.backgroundColor = "black";
-        grid[row][col] = 3;
-      }else{
-        cell.style.backgroundColor = "white";
-        grid[row][col] = 0;
-      }
+    // if(cell.className !== "source" && cell.className !== "sink"){
+    if(cell.className === "default"){
+      grid[row][col] = 3;
+    }else if(cell.className === "blocks"){
+      grid[row][col] = 0;
     }
+    // }
   }
 
   function handleClick(id){
@@ -114,7 +95,25 @@ function GridComponent(){
 
   return(
     <div className="grid">
-      {generateGrid(25,25)}
+      <table>
+          <tbody>
+            {grid.map((row, i ) => (
+              <tr key={i}>
+                {row.map((cell, j) => (
+                  <td key={j} id={`c${i}_${j}`}
+                  onClick={() => handleClick(`c${i}_${j}`)}
+                  className={
+                  grid[i][j] === 0 ? 'default' :
+                  grid[i][j] === 1 ? 'source' :
+                  grid[i][j] === 2 ? 'sink' :
+                  grid[i][j] === 3 ? 'blocks' : ''}>
+                    {}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
     </div>
   );
 }

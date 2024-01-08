@@ -1,3 +1,4 @@
+const { dijkstra } = require('./dijkstra');
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
@@ -14,7 +15,7 @@ const databse = mysql.createPool({
   user: 'root',
   password: 'root',
   database: 'pathfind',
-  connectionLimit: 10, // Adjust as needed
+  connectionLimit: 10,
 });
 
 const databasePool = databse.promise();
@@ -68,15 +69,30 @@ app.get('/options', async (req, res) => {
 
 app.post('/load', async (req, res) => {
   const id = (req.body).key;
-  console.log(id);
   try{
       const result = (await databasePool.query('SELECT * FROM pathfindt WHERE id=?', id))['0'];
-      console.log(result);
+      // console.log(result);
       res.send(result);
   }catch(error){
     console.error('Error reading data:', error);
       res.status(500).json({ error: 'Internal Server Error' });
   }
+});
+
+app.post('/delete', async (req, res) => {
+  const id = (req.body).key;
+  try{
+      const result = (await databasePool.query('DELETE FROM pathfindt WHERE id=?', id))['0'];
+      res.send(result);
+  }catch(error){
+    console.error('Error reading data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.post('/execute', async (req, res) => {
+  const grid = (req.body).key
+  dijkstra(grid);
 });
 
 app.get('/', (req, res) => {

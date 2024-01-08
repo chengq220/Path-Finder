@@ -107,7 +107,8 @@ function GridComponent(){
                   grid[i][j] === 0 ? 'default' :
                   grid[i][j] === 1 ? 'source' :
                   grid[i][j] === 2 ? 'sink' :
-                  grid[i][j] === 3 ? 'blocks' : ''}>
+                  grid[i][j] === 3 ? 'blocks' :
+                  grid[i][j] === 4 ? 'path' : ''}>
                     {}
                   </td>
                 ))}

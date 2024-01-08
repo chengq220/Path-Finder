@@ -35,8 +35,28 @@ function Selection(){
     }
   }
 
-  function execute(){
-    console.log("grid");
+  const execute = async() => {
+    console.log("execute called");
+    try{
+      const response = await fetch("http://localhost:8000/execute",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+         key: grid,
+        }),
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log('Response from server:', responseData);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
   }
 
   const save = async () => {
@@ -57,7 +77,7 @@ function Selection(){
       }
 
       const responseData = await response.json();
-      console.log('Response from server:', responseData);
+      // console.log('Response from server:', responseData);
     } catch (error) {
         console.error('Error:', error.message);
     }

@@ -54,6 +54,25 @@ function SearchBar(){
     }
   };
 
+  const deleteConfig = async () => {
+    try{
+      const response = await fetch('http://localhost:8000/delete',{
+        method:'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+         key: select,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+    }catch(error){
+      console.error('Error fetching options: ', error.message);
+    }
+  };
+
   const loadGrid = (data) => {
     var newGrid = GenerateEmptyGrid(25, 25);
     const source = data['source']['0'];
@@ -90,7 +109,10 @@ function SearchBar(){
           ))}
           </select>
         </label>
-        <div className={"submit"} onClick={submit}>Load configuration</div>
+        <div className={"buttons"}>
+          <div className={"submit"} onClick={submit}>Load configuration</div>
+          <div className={"submit"} onClick={deleteConfig}>Delete configuration</div>
+        </div>
       </form>
     </div>
   );

@@ -5,6 +5,7 @@ import SelectContext from './context.js';
 function Selection(){
   const {selectionState, setSelectionState} = useContext(SelectContext);
   const {grid, setGrid} = useContext(SelectContext);
+  const [exe, setExe] = useState(false);
 
   function select(state){
     const active = document.querySelectorAll(".active");
@@ -36,7 +37,6 @@ function Selection(){
   }
 
   const execute = async() => {
-    console.log("execute called");
     try{
       const response = await fetch("http://localhost:8000/execute",{
         method: 'POST',
@@ -53,7 +53,14 @@ function Selection(){
       }
 
       const responseData = await response.json();
-      console.log('Response from server:', responseData);
+      for(let i = 0; i < responseData.length; ++i){
+        var item = responseData[`${i}`];
+        grid[item[0]][item[1]] = 4;
+      }
+      console.log(grid);
+      setGrid(grid);
+      setExe(true);
+      // console.log('Response from server:', responseData);
     } catch (error) {
         console.error('Error:', error.message);
     }

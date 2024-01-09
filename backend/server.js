@@ -1,4 +1,4 @@
-const { dijkstra } = require('./dijkstra');
+const { bfs } = require('./bfs');
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
@@ -92,7 +92,8 @@ app.post('/delete', async (req, res) => {
 
 app.post('/execute', async (req, res) => {
   const grid = (req.body).key
-  dijkstra(grid);
+  var solution = bfs(grid);
+  res.send(JSON.stringify(solution));
 });
 
 app.get('/', (req, res) => {
